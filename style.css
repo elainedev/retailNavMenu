@@ -36,4 +36,16 @@ body {
   background-color: #242424;
 }
 
+.local-time-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  color: #BCBCBC;
+}
+.local-time-container .time {
+  font-size: 22px;
+  margin-left: 4px;
+}
+
 /*# sourceMappingURL=style.css.map */

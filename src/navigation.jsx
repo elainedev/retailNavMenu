@@ -1,4 +1,4 @@
-class NavigationContainer extends React.Component {
+class NavigationPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -9,6 +9,7 @@ class NavigationContainer extends React.Component {
       sliderWidth : 0,
       sliderOffsetLeft: 0,
       city : "",
+      cityTimeZone : "UTC",
       isResizing : false,
     };
   }
@@ -78,14 +79,17 @@ class NavigationContainer extends React.Component {
     if (numberCities > 0) {
       for (let i = 0; i < numberCities; i++) {
         const city = this.citiesData[i];
-        const cityName = city.section;
+        const cityName = city.section;  // the city name in camel-case
         cities.push(<CityItem 
           cityID={cityName}
           cityClassName={cityName}
           cityClicked={this.state.city}
           cityLabel={city.label}
           key={`city-${i}`}
-          onClick={() => this.cityOnClick(cityName)} />)
+          onClick={() => {
+            this.cityOnClick(cityName); 
+            this.setState({cityTimeZone : city.label});}
+          } />) 
       }
     }
     return cities;
@@ -95,15 +99,82 @@ class NavigationContainer extends React.Component {
     const {showSlider, sliderWidth, sliderOffsetLeft, isResizing} = this.state;
 
     return (
-      <div className="navigation-container">
-        <div className="cities-list">
-          {this.displayCities()}
+      <div className="navigation-page">
+        <div className="navigation-container">
+          <div className="cities-list">
+            {this.displayCities()}
+          </div>
+
+          <BottomBar showSlider={showSlider} sliderWidth={sliderWidth} sliderOffsetLeft={sliderOffsetLeft} noTransition={isResizing} />
+
         </div>
 
-        <BottomBar showSlider={showSlider} sliderWidth={sliderWidth} sliderOffsetLeft={sliderOffsetLeft} noTransition={isResizing} />
+        {showSlider ?
+          <LocalTime cityTimeZone={this.state.cityTimeZone} />
+          : null
+        }
+
       </div>
     )
   }
+}
+
+
+type LocalTimePropsType = {
+  cityTimeZone : string,
+}
+
+class LocalTime extends React.Component<LocalTimePropsType> {
+
+  computeTimeZone() {
+    let timeZone = "";
+
+    switch (this.props.cityTimeZone) {
+      case "Cupertino":
+        timeZone = "America/Los_Angeles";
+        break;
+      case "New York City":
+        timeZone = "America/New_York";
+        break;
+      case "London":
+        timeZone = "Europe/London";
+        break;
+      case "Amsterdam":
+        timeZone = "Europe/Amsterdam";
+        break;
+      case "Tokyo":
+        timeZone = "Asia/Tokyo";
+        break;
+      case "Hong Kong":
+        timeZone = "Asia/Hong_Kong";
+        break;
+      case "Sydney":
+        timeZone = "Australia/Sydney";
+        break;
+    }
+
+    return timeZone;
+  }
+
+  timeZoneOptions = {
+    timeZone : this.computeTimeZone(),
+    hour: 'numeric', minute: 'numeric', second: 'numeric',
+  }
+
+  render() {
+
+    let timeZoneOptions = {
+      timeZone : this.computeTimeZone(),
+      hour: 'numeric', minute: 'numeric', second: 'numeric',
+    }
+
+    return (
+      <div className="local-time-container">
+        Local Time: <span className="time"> {(new Date()).toLocaleString([], timeZoneOptions)}</span>
+      </div>
+    )
+  }
+
 }
 
 // normally I would use FlowJS to check typing; I am not using Flow here, but I thought I would provide PropTypes anyway
@@ -165,6 +236,9 @@ class BottomBar extends React.Component<BottomBarPropsType> {
 
 
 
+
+
+
 const domContainer = document.querySelector("#navigation-menu");
 
-ReactDOM.render(<NavigationContainer />, domContainer);
+ReactDOM.render(<NavigationPage />, domContainer);

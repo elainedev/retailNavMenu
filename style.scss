@@ -46,3 +46,16 @@ $bottom-bar-height: 1px;
 	}
 
 }
+
+.local-time-container {
+	display: flex;
+	justify-content: center;
+	align-items: center; 
+	padding: 50px;
+	color: $light-gray;
+
+	.time {
+		font-size: 22px;
+		margin-left: 4px;
+	}
+}

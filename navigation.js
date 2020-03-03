@@ -6,13 +6,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var NavigationContainer = function (_React$Component) {
-  _inherits(NavigationContainer, _React$Component);
+var NavigationPage = function (_React$Component) {
+  _inherits(NavigationPage, _React$Component);
 
-  function NavigationContainer(props) {
-    _classCallCheck(this, NavigationContainer);
+  function NavigationPage(props) {
+    _classCallCheck(this, NavigationPage);
 
-    var _this = _possibleConstructorReturn(this, (NavigationContainer.__proto__ || Object.getPrototypeOf(NavigationContainer)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (NavigationPage.__proto__ || Object.getPrototypeOf(NavigationPage)).call(this, props));
 
     _this.citiesData = [];
 
@@ -23,12 +23,13 @@ var NavigationContainer = function (_React$Component) {
       sliderWidth: 0,
       sliderOffsetLeft: 0,
       city: "",
+      cityTimeZone: "UTC",
       isResizing: false
     };
     return _this;
   }
 
-  _createClass(NavigationContainer, [{
+  _createClass(NavigationPage, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
@@ -108,7 +109,7 @@ var NavigationContainer = function (_React$Component) {
       if (numberCities > 0) {
         var _loop = function _loop(i) {
           var city = _this4.citiesData[i];
-          var cityName = city.section;
+          var cityName = city.section; // the city name in camel-case
           cities.push(React.createElement(CityItem, {
             cityID: cityName,
             cityClassName: cityName,
@@ -116,7 +117,8 @@ var NavigationContainer = function (_React$Component) {
             cityLabel: city.label,
             key: "city-" + i,
             onClick: function onClick() {
-              return _this4.cityOnClick(cityName);
+              _this4.cityOnClick(cityName);
+              _this4.setState({ cityTimeZone: city.label });
             } }));
         };
 
@@ -138,25 +140,107 @@ var NavigationContainer = function (_React$Component) {
 
       return React.createElement(
         "div",
-        { className: "navigation-container" },
+        { className: "navigation-page" },
         React.createElement(
           "div",
-          { className: "cities-list" },
-          this.displayCities()
+          { className: "navigation-container" },
+          React.createElement(
+            "div",
+            { className: "cities-list" },
+            this.displayCities()
+          ),
+          React.createElement(BottomBar, { showSlider: showSlider, sliderWidth: sliderWidth, sliderOffsetLeft: sliderOffsetLeft, noTransition: isResizing })
         ),
-        React.createElement(BottomBar, { showSlider: showSlider, sliderWidth: sliderWidth, sliderOffsetLeft: sliderOffsetLeft, noTransition: isResizing })
+        showSlider ? React.createElement(LocalTime, { cityTimeZone: this.state.cityTimeZone }) : null
       );
     }
   }]);
 
-  return NavigationContainer;
+  return NavigationPage;
+}(React.Component);
+
+var LocalTime = function (_React$Component2) {
+  _inherits(LocalTime, _React$Component2);
+
+  function LocalTime() {
+    var _ref;
+
+    var _temp, _this5, _ret2;
+
+    _classCallCheck(this, LocalTime);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret2 = (_temp = (_this5 = _possibleConstructorReturn(this, (_ref = LocalTime.__proto__ || Object.getPrototypeOf(LocalTime)).call.apply(_ref, [this].concat(args))), _this5), _this5.timeZoneOptions = {
+      timeZone: _this5.computeTimeZone(),
+      hour: 'numeric', minute: 'numeric', second: 'numeric'
+    }, _temp), _possibleConstructorReturn(_this5, _ret2);
+  }
+
+  _createClass(LocalTime, [{
+    key: "computeTimeZone",
+    value: function computeTimeZone() {
+      var timeZone = "";
+
+      switch (this.props.cityTimeZone) {
+        case "Cupertino":
+          timeZone = "America/Los_Angeles";
+          break;
+        case "New York City":
+          timeZone = "America/New_York";
+          break;
+        case "London":
+          timeZone = "Europe/London";
+          break;
+        case "Amsterdam":
+          timeZone = "Europe/Amsterdam";
+          break;
+        case "Tokyo":
+          timeZone = "Asia/Tokyo";
+          break;
+        case "Hong Kong":
+          timeZone = "Asia/Hong_Kong";
+          break;
+        case "Sydney":
+          timeZone = "Australia/Sydney";
+          break;
+      }
+
+      return timeZone;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+
+      var timeZoneOptions = {
+        timeZone: this.computeTimeZone(),
+        hour: 'numeric', minute: 'numeric', second: 'numeric'
+      };
+
+      return React.createElement(
+        "div",
+        { className: "local-time-container" },
+        "Local Time: ",
+        React.createElement(
+          "span",
+          { className: "time" },
+          " ",
+          new Date().toLocaleString([], timeZoneOptions)
+        )
+      );
+    }
+  }]);
+
+  return LocalTime;
 }(React.Component);
 
 // normally I would use FlowJS to check typing; I am not using Flow here, but I thought I would provide PropTypes anyway
 
 
-var CityItem = function (_React$Component2) {
-  _inherits(CityItem, _React$Component2);
+var CityItem = function (_React$Component3) {
+  _inherits(CityItem, _React$Component3);
 
   function CityItem() {
     _classCallCheck(this, CityItem);
@@ -186,8 +270,8 @@ var CityItem = function (_React$Component2) {
   return CityItem;
 }(React.Component);
 
-var BottomBar = function (_React$Component3) {
-  _inherits(BottomBar, _React$Component3);
+var BottomBar = function (_React$Component4) {
+  _inherits(BottomBar, _React$Component4);
 
   function BottomBar() {
     _classCallCheck(this, BottomBar);
@@ -224,4 +308,4 @@ var BottomBar = function (_React$Component3) {
 
 var domContainer = document.querySelector("#navigation-menu");
 
-ReactDOM.render(React.createElement(NavigationContainer, null), domContainer);
+ReactDOM.render(React.createElement(NavigationPage, null), domContainer);
