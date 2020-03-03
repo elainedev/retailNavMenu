@@ -9,14 +9,14 @@ class NavigationContainer extends React.Component {
       showSlider : false,
       sliderWidth : 0,
       sliderOffsetLeft: 0,
-      cityID : "",
+      city : "",
     };
   }
 
   citiesData = [];
 
   componentDidMount() {
-    window.addEventListener("resize", () => this.updateSlider(this.state.cityID));
+    window.addEventListener("resize", () => this.updateSlider(this.state.city));
   }
 
   requestJSONData() {    
@@ -48,21 +48,24 @@ class NavigationContainer extends React.Component {
   }
 
   // click handler for when a city is clicked on
-  cityOnClick(cityID) {
+  cityOnClick(city) {
     if (this.state.showSlider == false) {
       this.setState({
         showSlider : true,
       })
     }
-    
-    this.updateSlider(cityID);
-  }
-
-  updateSlider(cityID) {
-    let cityClicked = document.getElementById(cityID);
 
     this.setState({
-      cityID : cityID,
+      city: city,
+    })
+
+    this.updateSlider(city);
+  }
+
+  updateSlider(city) {
+    let cityClicked = document.getElementById(city);
+
+    this.setState({
       sliderWidth : cityClicked.offsetWidth,
       sliderOffsetLeft : cityClicked.offsetLeft,
     });

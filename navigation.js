@@ -22,7 +22,7 @@ var NavigationContainer = function (_React$Component) {
       showSlider: false,
       sliderWidth: 0,
       sliderOffsetLeft: 0,
-      cityID: ""
+      city: ""
     };
     return _this;
   }
@@ -33,7 +33,7 @@ var NavigationContainer = function (_React$Component) {
       var _this2 = this;
 
       window.addEventListener("resize", function () {
-        return _this2.updateSlider(_this2.state.cityID);
+        return _this2.updateSlider(_this2.state.city);
       });
     }
   }, {
@@ -69,22 +69,25 @@ var NavigationContainer = function (_React$Component) {
 
   }, {
     key: "cityOnClick",
-    value: function cityOnClick(cityID) {
+    value: function cityOnClick(city) {
       if (this.state.showSlider == false) {
         this.setState({
           showSlider: true
         });
       }
 
-      this.updateSlider(cityID);
+      this.setState({
+        city: city
+      });
+
+      this.updateSlider(city);
     }
   }, {
     key: "updateSlider",
-    value: function updateSlider(cityID) {
-      var cityClicked = document.getElementById(cityID);
+    value: function updateSlider(city) {
+      var cityClicked = document.getElementById(city);
 
       this.setState({
-        cityID: cityID,
         sliderWidth: cityClicked.offsetWidth,
         sliderOffsetLeft: cityClicked.offsetLeft
       });
