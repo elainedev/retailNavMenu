@@ -19,6 +19,7 @@ var NavigationContainer = function (_React$Component) {
     _this.requestJSONData();
     _this.state = {
       dataHasLoaded: false,
+      showSlider: false,
       sliderWidth: 0,
       sliderOffsetLeft: 0
     };
@@ -26,13 +27,13 @@ var NavigationContainer = function (_React$Component) {
   }
 
   _createClass(NavigationContainer, [{
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-
-      console.log('clicked state', this.state);
-    }
-  }, {
     key: 'requestJSONData',
+
+
+    // componentDidUpdate() {
+    //   console.log('clicked state', this.state)
+    // }
+
     value: function requestJSONData() {
       var _this2 = this;
 
@@ -65,7 +66,12 @@ var NavigationContainer = function (_React$Component) {
   }, {
     key: 'cityOnClick',
     value: function cityOnClick(cityID) {
-      console.log("clicky", document.getElementById(cityID).offsetWidth);
+      if (this.state.showSlider == false) {
+        this.setState({
+          showSlider: true
+        });
+      }
+      // console.log("clicky", document.getElementById(cityID).offsetWidth);
       var cityClicked = document.getElementById(cityID);
       this.setState({
         sliderWidth: cityClicked.offsetWidth,
@@ -100,6 +106,11 @@ var NavigationContainer = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _state = this.state,
+          showSlider = _state.showSlider,
+          sliderWidth = _state.sliderWidth,
+          sliderOffsetLeft = _state.sliderOffsetLeft;
+
 
       return React.createElement(
         'div',
@@ -109,7 +120,7 @@ var NavigationContainer = function (_React$Component) {
           { className: 'cities-list' },
           this.displayCities()
         ),
-        React.createElement(BottomBar, null)
+        React.createElement(BottomBar, { showSlider: showSlider, sliderWidth: sliderWidth, sliderOffsetLeft: sliderOffsetLeft })
       );
     }
   }]);
@@ -128,14 +139,6 @@ var CityItem = function (_React$Component2) {
 
   _createClass(CityItem, [{
     key: 'render',
-
-
-    // componentDidMount() {
-    //   let city = document.getElementById(this.props.cityID);
-    //   console.log("parent", city.offsetParent)
-    //   console.log('mounted', city, city.offsetLeft)
-    // }
-
     value: function render() {
       var _props = this.props,
           cityLabel = _props.cityLabel,
@@ -166,11 +169,22 @@ var BottomBar = function (_React$Component3) {
   _createClass(BottomBar, [{
     key: 'render',
     value: function render() {
+      var _props2 = this.props,
+          showSlider = _props2.showSlider,
+          sliderWidth = _props2.sliderWidth,
+          sliderOffsetLeft = _props2.sliderOffsetLeft;
+
+      console.log('test', showSlider, sliderWidth, sliderOffsetLeft);
+
+      var firstClickStyle = {
+        width: sliderWidth,
+        transform: 'translateX(' + (sliderOffsetLeft - 20) + 'px)' // subtract 20 because the navigation container has padding-left set at 20px
+      };
 
       return React.createElement(
         'div',
         { className: 'bottom-bar' },
-        React.createElement('div', { className: 'slider' })
+        showSlider ? React.createElement('div', { className: 'slider', style: firstClickStyle }) : null
       );
     }
   }]);

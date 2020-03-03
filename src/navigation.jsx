@@ -6,6 +6,7 @@ class NavigationContainer extends React.Component {
     this.requestJSONData();
     this.state = { 
       dataHasLoaded : false,
+      showSlider : false,
       sliderWidth : 0,
       sliderOffsetLeft: 0,
     };
@@ -13,11 +14,9 @@ class NavigationContainer extends React.Component {
 
   citiesData = [];
 
-  componentDidUpdate() {
-
-    console.log('clicked state', this.state)
-
-  }
+  // componentDidUpdate() {
+  //   console.log('clicked state', this.state)
+  // }
 
   requestJSONData() {    
     new Promise((resolve, reject) => {
@@ -47,10 +46,14 @@ class NavigationContainer extends React.Component {
     })
   }
 
-
   // click handler for when a city is clicked on
   cityOnClick(cityID) {
-    console.log("clicky", document.getElementById(cityID).offsetWidth);
+    if (this.state.showSlider == false) {
+      this.setState({
+        showSlider : true,
+      })
+    }
+    // console.log("clicky", document.getElementById(cityID).offsetWidth);
     const cityClicked = document.getElementById(cityID);
     this.setState({ 
       sliderWidth : cityClicked.offsetWidth,
@@ -73,6 +76,7 @@ class NavigationContainer extends React.Component {
   }
 
   render() {
+    const {showSlider, sliderWidth, sliderOffsetLeft} = this.state;
 
     return (
       <div className="navigation-container">
@@ -80,19 +84,13 @@ class NavigationContainer extends React.Component {
           {this.displayCities()}
         </div>
 
-        <BottomBar />
+        <BottomBar showSlider={showSlider} sliderWidth={sliderWidth} sliderOffsetLeft={sliderOffsetLeft}/>
       </div>
     )
   }
 }
 
 class CityItem extends React.Component {
-
-  // componentDidMount() {
-  //   let city = document.getElementById(this.props.cityID);
-  //   console.log("parent", city.offsetParent)
-  //   console.log('mounted', city, city.offsetLeft)
-  // }
 
   render() {
     const {cityLabel, cityID, onClick} = this.props;
@@ -110,9 +108,20 @@ class BottomBar extends React.Component {
 
   render() {
 
+    const {showSlider, sliderWidth, sliderOffsetLeft} = this.props;
+console.log('test', showSlider, sliderWidth, sliderOffsetLeft);
+
+    const firstClickStyle = {
+      width: sliderWidth,
+      transform : `translateX(${sliderOffsetLeft - 20}px)`,  // subtract 20 because the navigation container has padding-left set at 20px
+    }
+
     return (
       <div className="bottom-bar">
-        <div className="slider" />
+        {showSlider ? 
+          <div className="slider" style={firstClickStyle}/> 
+          : null
+        }
       </div>
     )
   }

@@ -1,10 +1,12 @@
 body {
   min-width: 800px;
+  margin: 0;
 }
 
 .navigation-container {
-  width: 98%;
-  margin: 30px auto 0;
+  min-height: 56px;
+  margin-top: 30px;
+  padding: 0 20px;
 }
 .navigation-container .cities-list {
   display: flex;
@@ -15,6 +17,7 @@ body {
   display: inline-block;
   margin: 20px 20px 17px;
   color: #BCBCBC;
+  font-size: 16px;
   cursor: pointer;
 }
 
@@ -23,7 +26,6 @@ body {
   background-color: #BCBCBC;
 }
 .bottom-bar .slider {
-  width: 80px;
   height: 1px;
   background-color: black;
 }
