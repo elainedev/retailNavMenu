@@ -50,23 +50,29 @@ var NavigationContainer = function (_React$Component) {
       });
     }
   }, {
-    key: 'render',
-    value: function render() {
-
-      // let {citiesArr} = this.state;
-      console.log('JSONData', this.citiesData);
-
+    key: 'displayCities',
+    value: function displayCities() {
       var cities = [];
-      if (this.citiesData.length > 0) {
-        for (var i = 0; i < this.citiesData.length; i++) {
+      var numberCities = this.citiesData.length;
+
+      if (numberCities > 0) {
+        for (var i = 0; i < numberCities; i++) {
           cities.push(React.createElement(CityItem, { cityName: this.citiesData[i].section, key: 'city-' + i }));
         }
       }
 
+      return cities;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      console.log('JSONData', this.citiesData);
+
       return React.createElement(
         'div',
         { className: 'navigation-container' },
-        cities
+        this.displayCities()
       );
     }
   }]);

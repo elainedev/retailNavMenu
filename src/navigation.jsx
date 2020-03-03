@@ -37,26 +37,27 @@ class NavigationContainer extends React.Component {
     })
   }
 
-
-
-  render() {
-  
-    // let {citiesArr} = this.state;
-    console.log('JSONData', this.citiesData);
-
+  displayCities() {
     let cities = [];
-    if (this.citiesData.length > 0) {
-      for (let i = 0; i < this.citiesData.length; i++) {
+    let numberCities = this.citiesData.length;
+
+    if (numberCities > 0) {
+      for (let i = 0; i < numberCities; i++) {
         cities.push(<CityItem cityName={this.citiesData[i].section} key={`city-${i}`} />)
       }
     }
-    
+
+    return cities;
+  }
+
+  render() {
+  
+    console.log('JSONData', this.citiesData);
 
     return (
       <div className="navigation-container">
-        {cities}
+        {this.displayCities()}
       </div>
-
     )
   }
 }
