@@ -109,17 +109,17 @@ class BottomBar extends React.Component {
   render() {
 
     const {showSlider, sliderWidth, sliderOffsetLeft} = this.props;
-console.log('test', showSlider, sliderWidth, sliderOffsetLeft);
 
-    const firstClickStyle = {
+    const lickStyle = {
       width: sliderWidth,
-      transform : `translateX(${sliderOffsetLeft - 20}px)`,  // subtract 20 because the navigation container has padding-left set at 20px
+      transform : `translateX(${sliderOffsetLeft - 20}px)`,  //subtract 20px because the navigation container has padding-left set at 20px,
+      transition: "all 0.5s",
     }
 
     return (
       <div className="bottom-bar">
         {showSlider ? 
-          <div className="slider" style={firstClickStyle}/> 
+          <div className="slider" style={lickStyle}/> 
           : null
         }
       </div>
