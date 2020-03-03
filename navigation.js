@@ -14,8 +14,10 @@ var NavigationContainer = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (NavigationContainer.__proto__ || Object.getPrototypeOf(NavigationContainer)).call(this, props));
 
+    _this.citiesData = [];
+
     _this.requestJSONData();
-    _this.state = { citiesArr: [] };
+    // this.state = { citiesArr : [] };
     return _this;
   }
 
@@ -41,9 +43,8 @@ var NavigationContainer = function (_React$Component) {
         citiesRequest.send();
       }).then(function (data) {
         console.log("data obtained:", data);
-        _this2.setState({
-          citiesArr: data
-        });
+        _this2.citiesData = data;
+        _this2.setState({});
       }).catch(function (error) {
         console.log(error);
       });
@@ -51,18 +52,21 @@ var NavigationContainer = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var citiesArr = this.state.citiesArr;
-      // console.log('render', this.state.citiesArr, cities)
-      // if (cities.length > 0) {
-      //   cities = this.state.citiesArr;
-      //   console.log("if", cities[0].section)
-      // }
-      // console.log("outside", cities)
+
+      // let {citiesArr} = this.state;
+      console.log('JSONData', this.citiesData);
+
+      var cities = [];
+      if (this.citiesData.length > 0) {
+        for (var i = 0; i < this.citiesData.length; i++) {
+          cities.push(React.createElement(CityItem, { cityName: this.citiesData[i].section, key: 'city-' + i }));
+        }
+      }
 
       return React.createElement(
         'div',
         { className: 'navigation-container' },
-        React.createElement(CitiesMenu, { cities: citiesArr.length > 0 ? citiesArr[0].section : "" })
+        cities
       );
     }
   }]);
@@ -70,28 +74,28 @@ var NavigationContainer = function (_React$Component) {
   return NavigationContainer;
 }(React.Component);
 
-var CitiesMenu = function (_React$Component2) {
-  _inherits(CitiesMenu, _React$Component2);
+var CityItem = function (_React$Component2) {
+  _inherits(CityItem, _React$Component2);
 
-  function CitiesMenu() {
-    _classCallCheck(this, CitiesMenu);
+  function CityItem() {
+    _classCallCheck(this, CityItem);
 
-    return _possibleConstructorReturn(this, (CitiesMenu.__proto__ || Object.getPrototypeOf(CitiesMenu)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (CityItem.__proto__ || Object.getPrototypeOf(CityItem)).apply(this, arguments));
   }
 
-  _createClass(CitiesMenu, [{
+  _createClass(CityItem, [{
     key: 'render',
     value: function render() {
 
       return React.createElement(
         'div',
         null,
-        this.props.cities
+        this.props.cityName
       );
     }
   }]);
 
-  return CitiesMenu;
+  return CityItem;
 }(React.Component);
 
 var domContainer = document.querySelector("#navigation-menu");
