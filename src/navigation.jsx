@@ -120,63 +120,6 @@ class NavigationPage extends React.Component {
 }
 
 
-type LocalTimePropsType = {
-  cityTimeZone : string,
-}
-
-class LocalTime extends React.Component<LocalTimePropsType> {
-
-  computeTimeZone() {
-    let timeZone = "";
-
-    switch (this.props.cityTimeZone) {
-      case "Cupertino":
-        timeZone = "America/Los_Angeles";
-        break;
-      case "New York City":
-        timeZone = "America/New_York";
-        break;
-      case "London":
-        timeZone = "Europe/London";
-        break;
-      case "Amsterdam":
-        timeZone = "Europe/Amsterdam";
-        break;
-      case "Tokyo":
-        timeZone = "Asia/Tokyo";
-        break;
-      case "Hong Kong":
-        timeZone = "Asia/Hong_Kong";
-        break;
-      case "Sydney":
-        timeZone = "Australia/Sydney";
-        break;
-    }
-
-    return timeZone;
-  }
-
-  timeZoneOptions = {
-    timeZone : this.computeTimeZone(),
-    hour: 'numeric', minute: 'numeric', second: 'numeric',
-  }
-
-  render() {
-
-    let timeZoneOptions = {
-      timeZone : this.computeTimeZone(),
-      hour: 'numeric', minute: 'numeric', second: 'numeric',
-    }
-
-    return (
-      <div className="local-time-container">
-        Local Time: <span className="time"> {(new Date()).toLocaleString([], timeZoneOptions)}</span>
-      </div>
-    )
-  }
-
-}
-
 // normally I would use FlowJS to check typing; I am not using Flow here, but I thought I would provide PropTypes anyway
 type CityItemPropsType = {
   cityID : string,
@@ -230,7 +173,83 @@ class BottomBar extends React.Component<BottomBarPropsType> {
 }
 
 
+type LocalTimePropsType = {
+  cityTimeZone : string,
+}
 
+class LocalTime extends React.Component<LocalTimePropsType> {
+
+  constructor(props) {
+    super(props);
+    this.state = {date : new Date()};
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    this.setState({
+      date: new Date()
+    });
+  }
+
+  computeTimeZone() {
+    let timeZone = "";
+
+    switch (this.props.cityTimeZone) {
+      case "Cupertino":
+        timeZone = "America/Los_Angeles";
+        break;
+      case "New York City":
+        timeZone = "America/New_York";
+        break;
+      case "London":
+        timeZone = "Europe/London";
+        break;
+      case "Amsterdam":
+        timeZone = "Europe/Amsterdam";
+        break;
+      case "Tokyo":
+        timeZone = "Asia/Tokyo";
+        break;
+      case "Hong Kong":
+        timeZone = "Asia/Hong_Kong";
+        break;
+      case "Sydney":
+        timeZone = "Australia/Sydney";
+        break;
+    }
+
+    return timeZone;
+  }
+
+  timeZoneOptions = {
+    timeZone : this.computeTimeZone(),
+    hour: 'numeric', minute: 'numeric', second: 'numeric',
+  }
+
+  render() {
+
+    let timeZoneOptions = {
+      timeZone : this.computeTimeZone(),
+      hour: 'numeric', minute: 'numeric', second: 'numeric',
+    }
+
+    return (
+      <div className="local-time-container">
+        Local Time: <span className="time">{this.state.date.toLocaleString([], timeZoneOptions)}</span>
+      </div>
+    )
+  }
+}
 
 
 

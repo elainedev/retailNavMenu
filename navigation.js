@@ -159,27 +159,115 @@ var NavigationPage = function (_React$Component) {
   return NavigationPage;
 }(React.Component);
 
-var LocalTime = function (_React$Component2) {
-  _inherits(LocalTime, _React$Component2);
+// normally I would use FlowJS to check typing; I am not using Flow here, but I thought I would provide PropTypes anyway
 
-  function LocalTime() {
-    var _ref;
 
-    var _temp, _this5, _ret2;
+var CityItem = function (_React$Component2) {
+  _inherits(CityItem, _React$Component2);
 
+  function CityItem() {
+    _classCallCheck(this, CityItem);
+
+    return _possibleConstructorReturn(this, (CityItem.__proto__ || Object.getPrototypeOf(CityItem)).apply(this, arguments));
+  }
+
+  _createClass(CityItem, [{
+    key: "render",
+    value: function render() {
+      var _props = this.props,
+          cityID = _props.cityID,
+          cityClassName = _props.cityClassName,
+          cityClicked = _props.cityClicked,
+          cityLabel = _props.cityLabel,
+          onClick = _props.onClick;
+
+
+      return React.createElement(
+        "div",
+        { className: "city-item " + (cityClassName == cityClicked ? "black-highlight" : ""), id: cityID, onClick: onClick },
+        cityLabel
+      );
+    }
+  }]);
+
+  return CityItem;
+}(React.Component);
+
+var BottomBar = function (_React$Component3) {
+  _inherits(BottomBar, _React$Component3);
+
+  function BottomBar() {
+    _classCallCheck(this, BottomBar);
+
+    return _possibleConstructorReturn(this, (BottomBar.__proto__ || Object.getPrototypeOf(BottomBar)).apply(this, arguments));
+  }
+
+  _createClass(BottomBar, [{
+    key: "render",
+    value: function render() {
+      var _props2 = this.props,
+          showSlider = _props2.showSlider,
+          sliderWidth = _props2.sliderWidth,
+          sliderOffsetLeft = _props2.sliderOffsetLeft,
+          noTransition = _props2.noTransition;
+
+
+      var clickStyle = {
+        width: sliderWidth,
+        transform: "translateX(" + (sliderOffsetLeft - 20) + "px)", //subtract 20px because the navigation container has padding-left set at 20px,
+        transition: noTransition ? null : "all 0.5s" // slider automatically adjusts position without transition time when user resizes browser window
+      };
+
+      return React.createElement(
+        "div",
+        { className: "bottom-bar" },
+        showSlider ? React.createElement("div", { className: "slider", style: clickStyle }) : null
+      );
+    }
+  }]);
+
+  return BottomBar;
+}(React.Component);
+
+var LocalTime = function (_React$Component4) {
+  _inherits(LocalTime, _React$Component4);
+
+  function LocalTime(props) {
     _classCallCheck(this, LocalTime);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this7 = _possibleConstructorReturn(this, (LocalTime.__proto__ || Object.getPrototypeOf(LocalTime)).call(this, props));
 
-    return _ret2 = (_temp = (_this5 = _possibleConstructorReturn(this, (_ref = LocalTime.__proto__ || Object.getPrototypeOf(LocalTime)).call.apply(_ref, [this].concat(args))), _this5), _this5.timeZoneOptions = {
-      timeZone: _this5.computeTimeZone(),
+    _this7.timeZoneOptions = {
+      timeZone: _this7.computeTimeZone(),
       hour: 'numeric', minute: 'numeric', second: 'numeric'
-    }, _temp), _possibleConstructorReturn(_this5, _ret2);
+    };
+
+    _this7.state = { date: new Date() };
+    return _this7;
   }
 
   _createClass(LocalTime, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this8 = this;
+
+      this.timerID = setInterval(function () {
+        return _this8.tick();
+      }, 1000);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      clearInterval(this.timerID);
+    }
+  }, {
+    key: "tick",
+    value: function tick() {
+      this.setState({
+        date: new Date()
+      });
+    }
+  }, {
     key: "computeTimeZone",
     value: function computeTimeZone() {
       var timeZone = "";
@@ -226,84 +314,13 @@ var LocalTime = function (_React$Component2) {
         React.createElement(
           "span",
           { className: "time" },
-          " ",
-          new Date().toLocaleString([], timeZoneOptions)
+          this.state.date.toLocaleString([], timeZoneOptions)
         )
       );
     }
   }]);
 
   return LocalTime;
-}(React.Component);
-
-// normally I would use FlowJS to check typing; I am not using Flow here, but I thought I would provide PropTypes anyway
-
-
-var CityItem = function (_React$Component3) {
-  _inherits(CityItem, _React$Component3);
-
-  function CityItem() {
-    _classCallCheck(this, CityItem);
-
-    return _possibleConstructorReturn(this, (CityItem.__proto__ || Object.getPrototypeOf(CityItem)).apply(this, arguments));
-  }
-
-  _createClass(CityItem, [{
-    key: "render",
-    value: function render() {
-      var _props = this.props,
-          cityID = _props.cityID,
-          cityClassName = _props.cityClassName,
-          cityClicked = _props.cityClicked,
-          cityLabel = _props.cityLabel,
-          onClick = _props.onClick;
-
-
-      return React.createElement(
-        "div",
-        { className: "city-item " + (cityClassName == cityClicked ? "black-highlight" : ""), id: cityID, onClick: onClick },
-        cityLabel
-      );
-    }
-  }]);
-
-  return CityItem;
-}(React.Component);
-
-var BottomBar = function (_React$Component4) {
-  _inherits(BottomBar, _React$Component4);
-
-  function BottomBar() {
-    _classCallCheck(this, BottomBar);
-
-    return _possibleConstructorReturn(this, (BottomBar.__proto__ || Object.getPrototypeOf(BottomBar)).apply(this, arguments));
-  }
-
-  _createClass(BottomBar, [{
-    key: "render",
-    value: function render() {
-      var _props2 = this.props,
-          showSlider = _props2.showSlider,
-          sliderWidth = _props2.sliderWidth,
-          sliderOffsetLeft = _props2.sliderOffsetLeft,
-          noTransition = _props2.noTransition;
-
-
-      var clickStyle = {
-        width: sliderWidth,
-        transform: "translateX(" + (sliderOffsetLeft - 20) + "px)", //subtract 20px because the navigation container has padding-left set at 20px,
-        transition: noTransition ? null : "all 0.5s" // slider automatically adjusts position without transition time when user resizes browser window
-      };
-
-      return React.createElement(
-        "div",
-        { className: "bottom-bar" },
-        showSlider ? React.createElement("div", { className: "slider", style: clickStyle }) : null
-      );
-    }
-  }]);
-
-  return BottomBar;
 }(React.Component);
 
 var domContainer = document.querySelector("#navigation-menu");
