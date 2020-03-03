@@ -3,7 +3,9 @@ body {
 	margin: 0;
 }
 
-$gray-color: #BCBCBC;
+$light-gray: #BCBCBC;
+$dark-gray: #242424;
+$hover-color: #2D9FEB;
 $bottom-bar-height: 1px;
 
 .navigation-container {
@@ -20,19 +22,27 @@ $bottom-bar-height: 1px;
 .city-item {
 	display: inline-block;
 	margin: 20px 15px 17px;
-	color: $gray-color;
+	color: $light-gray;
 	font-size: 16px;
 	cursor: pointer;
+
+	&:hover {
+		color: $hover-color;
+	}
+
+	&.black-highlight {
+		color: $dark-gray;
+	}
 }
 
 
 .bottom-bar {
 	height: $bottom-bar-height;
-	background-color: $gray-color;
+	background-color: $light-gray;
 
 	.slider {
 		height: $bottom-bar-height;
-		background-color: black;
+		background-color: $dark-gray;
 	}
 
 }

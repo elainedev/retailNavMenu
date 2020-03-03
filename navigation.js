@@ -108,8 +108,15 @@ var NavigationContainer = function (_React$Component) {
       if (numberCities > 0) {
         var _loop = function _loop(i) {
           var city = _this4.citiesData[i];
-          cities.push(React.createElement(CityItem, { cityLabel: city.label, cityID: city.section, key: "city-" + i, onClick: function onClick() {
-              return _this4.cityOnClick(city.section);
+          var cityName = city.section;
+          cities.push(React.createElement(CityItem, {
+            cityID: cityName,
+            cityClassName: cityName,
+            cityClicked: _this4.state.city,
+            cityLabel: city.label,
+            key: "city-" + i,
+            onClick: function onClick() {
+              return _this4.cityOnClick(cityName);
             } }));
         };
 
@@ -161,14 +168,16 @@ var CityItem = function (_React$Component2) {
     key: "render",
     value: function render() {
       var _props = this.props,
-          cityLabel = _props.cityLabel,
           cityID = _props.cityID,
+          cityClassName = _props.cityClassName,
+          cityClicked = _props.cityClicked,
+          cityLabel = _props.cityLabel,
           onClick = _props.onClick;
 
 
       return React.createElement(
         "div",
-        { className: "city-item", id: cityID, onClick: onClick },
+        { className: "city-item " + (cityClassName == cityClicked ? "black-highlight" : ""), id: cityID, onClick: onClick },
         cityLabel
       );
     }

@@ -20,6 +20,12 @@ body {
   font-size: 16px;
   cursor: pointer;
 }
+.city-item:hover {
+  color: #2D9FEB;
+}
+.city-item.black-highlight {
+  color: #242424;
+}
 
 .bottom-bar {
   height: 1px;
@@ -27,7 +33,7 @@ body {
 }
 .bottom-bar .slider {
   height: 1px;
-  background-color: black;
+  background-color: #242424;
 }
 
 /*# sourceMappingURL=style.css.map */

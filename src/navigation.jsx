@@ -78,7 +78,14 @@ class NavigationContainer extends React.Component {
     if (numberCities > 0) {
       for (let i = 0; i < numberCities; i++) {
         const city = this.citiesData[i];
-        cities.push(<CityItem cityLabel={city.label} cityID={city.section} key={`city-${i}`} onClick={() => this.cityOnClick(city.section)} />)
+        const cityName = city.section;
+        cities.push(<CityItem 
+          cityID={cityName}
+          cityClassName={cityName}
+          cityClicked={this.state.city}
+          cityLabel={city.label}
+          key={`city-${i}`}
+          onClick={() => this.cityOnClick(cityName)} />)
       }
     }
     return cities;
@@ -101,18 +108,20 @@ class NavigationContainer extends React.Component {
 
 // normally I would use FlowJS to check typing; I am not using Flow here, but I thought I would provide PropTypes anyway
 type CityItemPropsType = {
-  cityLabel : string,
   cityID : string,
+  cityClassName : string,
+  cityClicked : string,
+  cityLabel : string,
   onClick : () => void,
 }
 
 class CityItem extends React.Component<CityItemPropsType> {
 
   render() {
-    const {cityLabel, cityID, onClick} = this.props;
+    const {cityID, cityClassName, cityClicked, cityLabel, onClick} = this.props;
 
     return (
-      <div className="city-item" id={cityID} onClick={onClick} >
+      <div className={`city-item ${cityClassName == cityClicked ? "black-highlight" : ""}`} id={cityID} onClick={onClick} >
         {cityLabel}
       </div>
     )
