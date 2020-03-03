@@ -1,50 +1,72 @@
 
 
-class Navigation extends React.Component {
+class NavigationContainer extends React.Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.requestJSONData();
+    this.state = { citiesArr : [] };
   }
 
-  requestJSONData() {
-    const citiesRequest = new XMLHttpRequest();
-    citiesRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
-    citiesRequest.onload = () => {
-      let citiesArr = JSON.parse(citiesRequest.responseText);
-      this.getJSONData(citiesArr);  // pass data to fn getJSONData
-    }
-    citiesRequest.send();
-  }
+  requestJSONData() {    
+    new Promise((resolve, reject) => {
+      const citiesRequest = new XMLHttpRequest();
 
-  getJSONData(data) {
-    console.log(data);
+      citiesRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
+
+      citiesRequest.onload = () => {
+        let citiesData = JSON.parse(citiesRequest.responseText);
+
+        if (citiesData) {
+          resolve(citiesData.cities);
+        }
+        else {
+          reject("failed to obtain data");
+        }
+      }
+      citiesRequest.send();
+    })
+    .then(data => {
+      console.log("data obtained:", data);
+      this.setState({
+        citiesArr : data
+      })
+    })
+    .catch(error => {
+      console.log(error);
+    })
   }
 
   render() {
+  
+    let cities = this.state.citiesArr;
+    console.log('render', this.state.citiesArr, cities)
 
-    // var ourRequest = new XMLHttpRequest();
-
-    // ourRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
-    // ourRequest.onload = function() {
-    //   console.log('json', ourRequest.responseText);
-    //   this.jsonData = JSON.parse(ourRequest.responseText);
-    //   console.log('json parsed', this.jsonData.cities[0].section);
-    // }
-    // ourRequest.send();
-
+    if (this.state.citiesArr.length > 0) {
+      cities = this.state.citiesArr;
+      console.log("if", cities)
+    }
+    console.log("outside", cities)
+    
     return (
-      <div className="parent">
-        
-          new test
+      <div className="navigation-container">
+
       </div>
 
     )
   }
 }
 
-class Cities extends React.Component {
+class CitiesMenu extends React.Component {
 
+  render() {
+    
+    return (
+      <div>
+      {this.props.cities}
+      </div>
+    )
+  }
 
 }
 
@@ -54,4 +76,4 @@ class Cities extends React.Component {
 
 const domContainer = document.querySelector("#navigation-menu");
 
-ReactDOM.render(<Navigation />, domContainer);
+ReactDOM.render(<NavigationContainer />, domContainer);

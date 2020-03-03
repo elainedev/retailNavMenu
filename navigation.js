@@ -6,73 +6,92 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Navigation = function (_React$Component) {
-  _inherits(Navigation, _React$Component);
+var NavigationContainer = function (_React$Component) {
+  _inherits(NavigationContainer, _React$Component);
 
-  function Navigation(props) {
-    _classCallCheck(this, Navigation);
+  function NavigationContainer(props) {
+    _classCallCheck(this, NavigationContainer);
 
-    var _this = _possibleConstructorReturn(this, (Navigation.__proto__ || Object.getPrototypeOf(Navigation)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (NavigationContainer.__proto__ || Object.getPrototypeOf(NavigationContainer)).call(this, props));
 
     _this.requestJSONData();
+    _this.state = { citiesArr: [] };
     return _this;
   }
 
-  _createClass(Navigation, [{
+  _createClass(NavigationContainer, [{
     key: 'requestJSONData',
     value: function requestJSONData() {
       var _this2 = this;
 
-      var citiesRequest = new XMLHttpRequest();
-      citiesRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
-      citiesRequest.onload = function () {
-        var citiesArr = JSON.parse(citiesRequest.responseText);
-        _this2.getJSONData(citiesArr); // pass data to fn getJSONData
-      };
-      citiesRequest.send();
-    }
-  }, {
-    key: 'getJSONData',
-    value: function getJSONData(data) {
-      console.log(data);
+      new Promise(function (resolve, reject) {
+        var citiesRequest = new XMLHttpRequest();
+
+        citiesRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
+
+        citiesRequest.onload = function () {
+          var citiesData = JSON.parse(citiesRequest.responseText);
+
+          if (citiesData) {
+            resolve(citiesData.cities);
+          } else {
+            reject("failed to obtain data");
+          }
+        };
+        citiesRequest.send();
+      }).then(function (data) {
+        console.log("data obtained:", data);
+        _this2.setState({
+          citiesArr: data
+        });
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
   }, {
     key: 'render',
     value: function render() {
 
-      // var ourRequest = new XMLHttpRequest();
+      var cities = this.state.citiesArr;
+      console.log('render', this.state.citiesArr, cities);
 
-      // ourRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
-      // ourRequest.onload = function() {
-      //   console.log('json', ourRequest.responseText);
-      //   this.jsonData = JSON.parse(ourRequest.responseText);
-      //   console.log('json parsed', this.jsonData.cities[0].section);
-      // }
-      // ourRequest.send();
+      if (this.state.citiesArr.length > 0) {
+        cities = this.state.citiesArr;
+        console.log("if", cities);
+      }
+      console.log("outside", cities);
+
+      return React.createElement('div', { className: 'navigation-container' });
+    }
+  }]);
+
+  return NavigationContainer;
+}(React.Component);
+
+var CitiesMenu = function (_React$Component2) {
+  _inherits(CitiesMenu, _React$Component2);
+
+  function CitiesMenu() {
+    _classCallCheck(this, CitiesMenu);
+
+    return _possibleConstructorReturn(this, (CitiesMenu.__proto__ || Object.getPrototypeOf(CitiesMenu)).apply(this, arguments));
+  }
+
+  _createClass(CitiesMenu, [{
+    key: 'render',
+    value: function render() {
 
       return React.createElement(
         'div',
-        { className: 'parent' },
-        'new test'
+        null,
+        this.props.cities
       );
     }
   }]);
 
-  return Navigation;
-}(React.Component);
-
-var Cities = function (_React$Component2) {
-  _inherits(Cities, _React$Component2);
-
-  function Cities() {
-    _classCallCheck(this, Cities);
-
-    return _possibleConstructorReturn(this, (Cities.__proto__ || Object.getPrototypeOf(Cities)).apply(this, arguments));
-  }
-
-  return Cities;
+  return CitiesMenu;
 }(React.Component);
 
 var domContainer = document.querySelector("#navigation-menu");
 
-ReactDOM.render(React.createElement(Navigation, null), domContainer);
+ReactDOM.render(React.createElement(NavigationContainer, null), domContainer);
