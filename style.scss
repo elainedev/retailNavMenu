@@ -1,3 +1,27 @@
-.parent {
-	color: red;
+body {
+	min-width: 700px;
+}
+
+.navigation-container {
+	width: 98%;
+	margin: 30px auto 0;
+	background: pink;
+
+	.cities-list {
+		display: flex;
+		justify-content: space-around;
+	}
+
+}
+
+.city-item {
+	display: inline-block;
+	margin: 20px 20px 17px;
+	color: #BCBCBC;  // light gray
+}
+
+
+.bottom-bar {
+	height: 2px;
+	background-color: #BCBCBC;
 }

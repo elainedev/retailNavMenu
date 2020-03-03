@@ -17,7 +17,7 @@ var NavigationContainer = function (_React$Component) {
     _this.citiesData = [];
 
     _this.requestJSONData();
-    // this.state = { citiesArr : [] };
+    _this.state = { dataHasLoaded: false };
     return _this;
   }
 
@@ -37,14 +37,14 @@ var NavigationContainer = function (_React$Component) {
           if (citiesData) {
             resolve(citiesData.cities);
           } else {
-            reject("failed to obtain data");
+            reject("failed to obtain city data");
           }
         };
         citiesRequest.send();
       }).then(function (data) {
-        console.log("data obtained:", data);
+        console.log("city data obtained:", data);
         _this2.citiesData = data;
-        _this2.setState({});
+        _this2.setState({ dataHasLoaded: true });
       }).catch(function (error) {
         console.log(error);
       });
@@ -57,22 +57,25 @@ var NavigationContainer = function (_React$Component) {
 
       if (numberCities > 0) {
         for (var i = 0; i < numberCities; i++) {
-          cities.push(React.createElement(CityItem, { cityName: this.citiesData[i].section, key: 'city-' + i }));
+          cities.push(React.createElement(CityItem, { cityName: this.citiesData[i].label, key: 'city-' + i }));
         }
       }
-
       return cities;
     }
   }, {
     key: 'render',
     value: function render() {
-
-      console.log('JSONData', this.citiesData);
+      // console.log('JSONData', this.citiesData);
 
       return React.createElement(
         'div',
         { className: 'navigation-container' },
-        this.displayCities()
+        React.createElement(
+          'div',
+          { className: 'cities-list' },
+          this.displayCities()
+        ),
+        React.createElement(BottomBar, null)
       );
     }
   }]);
@@ -95,13 +98,32 @@ var CityItem = function (_React$Component2) {
 
       return React.createElement(
         'div',
-        null,
+        { className: 'city-item' },
         this.props.cityName
       );
     }
   }]);
 
   return CityItem;
+}(React.Component);
+
+var BottomBar = function (_React$Component3) {
+  _inherits(BottomBar, _React$Component3);
+
+  function BottomBar() {
+    _classCallCheck(this, BottomBar);
+
+    return _possibleConstructorReturn(this, (BottomBar.__proto__ || Object.getPrototypeOf(BottomBar)).apply(this, arguments));
+  }
+
+  _createClass(BottomBar, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', { className: 'bottom-bar' });
+    }
+  }]);
+
+  return BottomBar;
 }(React.Component);
 
 var domContainer = document.querySelector("#navigation-menu");

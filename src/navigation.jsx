@@ -4,7 +4,7 @@ class NavigationContainer extends React.Component {
   constructor(props) {
     super(props);
     this.requestJSONData();
-    // this.state = { citiesArr : [] };
+    this.state = { dataHasLoaded : false };
   }
 
   citiesData = [];
@@ -22,15 +22,15 @@ class NavigationContainer extends React.Component {
           resolve(citiesData.cities);
         }
         else {
-          reject("failed to obtain data");
+          reject("failed to obtain city data");
         }
       }
       citiesRequest.send();
     })
     .then(data => {
-      console.log("data obtained:", data);
+      console.log("city data obtained:", data);
       this.citiesData = data;
-      this.setState({});
+      this.setState({ dataHasLoaded : true});
     })
     .catch(error => {
       console.log(error);
@@ -43,20 +43,22 @@ class NavigationContainer extends React.Component {
 
     if (numberCities > 0) {
       for (let i = 0; i < numberCities; i++) {
-        cities.push(<CityItem cityName={this.citiesData[i].section} key={`city-${i}`} />)
+        cities.push(<CityItem cityName={this.citiesData[i].label} key={`city-${i}`} />)
       }
     }
-
     return cities;
   }
 
   render() {
-  
-    console.log('JSONData', this.citiesData);
+    // console.log('JSONData', this.citiesData);
 
     return (
       <div className="navigation-container">
-        {this.displayCities()}
+        <div className="cities-list">
+          {this.displayCities()}
+        </div>
+
+        <BottomBar />
       </div>
     )
   }
@@ -67,13 +69,24 @@ class CityItem extends React.Component {
   render() {
     
     return (
-      <div>
-      {this.props.cityName}
+      <div className="city-item">
+        {this.props.cityName}
+      </div>
+    )
+  }
+}
+
+class BottomBar extends React.Component {
+  render() {
+    return (
+      <div className="bottom-bar">
       </div>
     )
   }
 
 }
+
+
 
 
 
