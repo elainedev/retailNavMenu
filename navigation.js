@@ -175,7 +175,7 @@ var BottomBar = function (_React$Component3) {
           sliderOffsetLeft = _props2.sliderOffsetLeft;
 
 
-      var lickStyle = {
+      var clickStyle = {
         width: sliderWidth,
         transform: 'translateX(' + (sliderOffsetLeft - 20) + 'px)', //subtract 20px because the navigation container has padding-left set at 20px,
         transition: "all 0.5s"
@@ -184,7 +184,7 @@ var BottomBar = function (_React$Component3) {
       return React.createElement(
         'div',
         { className: 'bottom-bar' },
-        showSlider ? React.createElement('div', { className: 'slider', style: lickStyle }) : null
+        showSlider ? React.createElement('div', { className: 'slider', style: clickStyle }) : null
       );
     }
   }]);

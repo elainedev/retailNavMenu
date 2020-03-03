@@ -110,7 +110,7 @@ class BottomBar extends React.Component {
 
     const {showSlider, sliderWidth, sliderOffsetLeft} = this.props;
 
-    const lickStyle = {
+    const clickStyle = {
       width: sliderWidth,
       transform : `translateX(${sliderOffsetLeft - 20}px)`,  //subtract 20px because the navigation container has padding-left set at 20px,
       transition: "all 0.5s",
@@ -119,7 +119,7 @@ class BottomBar extends React.Component {
     return (
       <div className="bottom-bar">
         {showSlider ? 
-          <div className="slider" style={lickStyle}/> 
+          <div className="slider" style={clickStyle}/> 
           : null
         }
       </div>
