@@ -2,6 +2,9 @@ body {
 	min-width: 800px;
 }
 
+$gray-color: #BCBCBC;
+$bottom-bar-height: 1px;
+
 .navigation-container {
 	width: 98%;
 	margin: 30px auto 0;
@@ -15,11 +18,19 @@ body {
 .city-item {
 	display: inline-block;
 	margin: 20px 20px 17px;
-	color: #BCBCBC;  // light gray
+	color: $gray-color;
+	cursor: pointer;
 }
 
 
 .bottom-bar {
-	height: 2px;
-	background-color: #BCBCBC;
+	height: $bottom-bar-height;
+	background-color: $gray-color;
+
+	.slider {
+		width: 80px;  // placeholder value; will be overridden by state in navigation.jsx
+		height: $bottom-bar-height;
+		background-color: black;
+	}
+
 }

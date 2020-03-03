@@ -4,10 +4,20 @@ class NavigationContainer extends React.Component {
   constructor(props) {
     super(props);
     this.requestJSONData();
-    this.state = { dataHasLoaded : false };
+    this.state = { 
+      dataHasLoaded : false,
+      sliderWidth : 0,
+      sliderOffsetLeft: 0,
+    };
   }
 
   citiesData = [];
+
+  componentDidUpdate() {
+
+    console.log('clicked state', this.state)
+
+  }
 
   requestJSONData() {    
     new Promise((resolve, reject) => {
@@ -16,19 +26,19 @@ class NavigationContainer extends React.Component {
       citiesRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
 
       citiesRequest.onload = () => {
-        let citiesData = JSON.parse(citiesRequest.responseText);
+        const citiesData = JSON.parse(citiesRequest.responseText);
 
         if (citiesData) {
           resolve(citiesData.cities);
         }
         else {
-          reject("failed to obtain city data");
+          reject("failed to obtain city list data");
         }
       }
       citiesRequest.send();
     })
     .then(data => {
-      console.log("city data obtained:", data);
+      console.log("city list data obtained:", data);
       this.citiesData = data;
       this.setState({ dataHasLoaded : true});
     })
@@ -37,20 +47,32 @@ class NavigationContainer extends React.Component {
     })
   }
 
+
+  // click handler for when a city is clicked on
+  cityOnClick(cityID) {
+    console.log("clicky", document.getElementById(cityID).offsetWidth);
+    const cityClicked = document.getElementById(cityID);
+    this.setState({ 
+      sliderWidth : cityClicked.offsetWidth,
+      sliderOffsetLeft : cityClicked.offsetLeft,
+    });
+  }
+
+  // use for loop to loop through citiesData and display each city 
   displayCities() {
-    let cities = [];
-    let numberCities = this.citiesData.length;
+    const cities = [];
+    const numberCities = this.citiesData.length;
 
     if (numberCities > 0) {
       for (let i = 0; i < numberCities; i++) {
-        cities.push(<CityItem cityLabel={this.citiesData[i].label} cityID={this.citiesData[i].section} key={`city-${i}` } />)
+        const city = this.citiesData[i];
+        cities.push(<CityItem cityLabel={city.label} cityID={city.section} key={`city-${i}`} onClick={() => this.cityOnClick(city.section)} />)
       }
     }
     return cities;
   }
 
   render() {
-    // console.log('JSONData', this.citiesData);
 
     return (
       <div className="navigation-container">
@@ -66,23 +88,18 @@ class NavigationContainer extends React.Component {
 
 class CityItem extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.cityRef = React.createRef();
-  }
-
-  componentDidMount() {
-    let city = document.getElementById(this.props.cityID);
-    console.log('mounted', city, city.offsetWidth, city.offsetLeft)
-  }
+  // componentDidMount() {
+  //   let city = document.getElementById(this.props.cityID);
+  //   console.log("parent", city.offsetParent)
+  //   console.log('mounted', city, city.offsetLeft)
+  // }
 
   render() {
-    const {cityLabel, cityID} = this.props;
+    const {cityLabel, cityID, onClick} = this.props;
 
     return (
-      <div className="city-item" id={cityID}>
+      <div className="city-item" id={cityID} onClick={onClick} >
         {cityLabel}
-        {this.cityRef.current}
       </div>
     )
   }
@@ -95,11 +112,10 @@ class BottomBar extends React.Component {
 
     return (
       <div className="bottom-bar">
-
+        <div className="slider" />
       </div>
     )
   }
-
 }
 
 

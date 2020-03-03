@@ -17,11 +17,21 @@ var NavigationContainer = function (_React$Component) {
     _this.citiesData = [];
 
     _this.requestJSONData();
-    _this.state = { dataHasLoaded: false };
+    _this.state = {
+      dataHasLoaded: false,
+      sliderWidth: 0,
+      sliderOffsetLeft: 0
+    };
     return _this;
   }
 
   _createClass(NavigationContainer, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+
+      console.log('clicked state', this.state);
+    }
+  }, {
     key: 'requestJSONData',
     value: function requestJSONData() {
       var _this2 = this;
@@ -37,27 +47,52 @@ var NavigationContainer = function (_React$Component) {
           if (citiesData) {
             resolve(citiesData.cities);
           } else {
-            reject("failed to obtain city data");
+            reject("failed to obtain city list data");
           }
         };
         citiesRequest.send();
       }).then(function (data) {
-        console.log("city data obtained:", data);
+        console.log("city list data obtained:", data);
         _this2.citiesData = data;
         _this2.setState({ dataHasLoaded: true });
       }).catch(function (error) {
         console.log(error);
       });
     }
+
+    // click handler for when a city is clicked on
+
+  }, {
+    key: 'cityOnClick',
+    value: function cityOnClick(cityID) {
+      console.log("clicky", document.getElementById(cityID).offsetWidth);
+      var cityClicked = document.getElementById(cityID);
+      this.setState({
+        sliderWidth: cityClicked.offsetWidth,
+        sliderOffsetLeft: cityClicked.offsetLeft
+      });
+    }
+
+    // use for loop to loop through citiesData and display each city 
+
   }, {
     key: 'displayCities',
     value: function displayCities() {
+      var _this3 = this;
+
       var cities = [];
       var numberCities = this.citiesData.length;
 
       if (numberCities > 0) {
+        var _loop = function _loop(i) {
+          var city = _this3.citiesData[i];
+          cities.push(React.createElement(CityItem, { cityLabel: city.label, cityID: city.section, key: 'city-' + i, onClick: function onClick() {
+              return _this3.cityOnClick(city.section);
+            } }));
+        };
+
         for (var i = 0; i < numberCities; i++) {
-          cities.push(React.createElement(CityItem, { cityLabel: this.citiesData[i].label, cityID: this.citiesData[i].section, key: 'city-' + i }));
+          _loop(i);
         }
       }
       return cities;
@@ -65,7 +100,6 @@ var NavigationContainer = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      // console.log('JSONData', this.citiesData);
 
       return React.createElement(
         'div',
@@ -86,34 +120,33 @@ var NavigationContainer = function (_React$Component) {
 var CityItem = function (_React$Component2) {
   _inherits(CityItem, _React$Component2);
 
-  function CityItem(props) {
+  function CityItem() {
     _classCallCheck(this, CityItem);
 
-    var _this3 = _possibleConstructorReturn(this, (CityItem.__proto__ || Object.getPrototypeOf(CityItem)).call(this, props));
-
-    _this3.cityRef = React.createRef();
-    return _this3;
+    return _possibleConstructorReturn(this, (CityItem.__proto__ || Object.getPrototypeOf(CityItem)).apply(this, arguments));
   }
 
   _createClass(CityItem, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var city = document.getElementById(this.props.cityID);
-      console.log('mounted', city, city.offsetWidth, city.offsetLeft);
-    }
-  }, {
     key: 'render',
+
+
+    // componentDidMount() {
+    //   let city = document.getElementById(this.props.cityID);
+    //   console.log("parent", city.offsetParent)
+    //   console.log('mounted', city, city.offsetLeft)
+    // }
+
     value: function render() {
       var _props = this.props,
           cityLabel = _props.cityLabel,
-          cityID = _props.cityID;
+          cityID = _props.cityID,
+          onClick = _props.onClick;
 
 
       return React.createElement(
         'div',
-        { className: 'city-item', id: cityID },
-        cityLabel,
-        this.cityRef.current
+        { className: 'city-item', id: cityID, onClick: onClick },
+        cityLabel
       );
     }
   }]);
@@ -134,7 +167,11 @@ var BottomBar = function (_React$Component3) {
     key: 'render',
     value: function render() {
 
-      return React.createElement('div', { className: 'bottom-bar' });
+      return React.createElement(
+        'div',
+        { className: 'bottom-bar' },
+        React.createElement('div', { className: 'slider' })
+      );
     }
   }]);
 
