@@ -9,23 +9,46 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Navigation = function (_React$Component) {
   _inherits(Navigation, _React$Component);
 
-  function Navigation() {
+  function Navigation(props) {
     _classCallCheck(this, Navigation);
 
-    return _possibleConstructorReturn(this, (Navigation.__proto__ || Object.getPrototypeOf(Navigation)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Navigation.__proto__ || Object.getPrototypeOf(Navigation)).call(this, props));
+
+    _this.requestJSONData();
+    return _this;
   }
 
   _createClass(Navigation, [{
+    key: 'requestJSONData',
+    value: function requestJSONData() {
+      var _this2 = this;
+
+      var citiesRequest = new XMLHttpRequest();
+      citiesRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
+      citiesRequest.onload = function () {
+        var citiesArr = JSON.parse(citiesRequest.responseText);
+        _this2.getJSONData(citiesArr); // pass data to fn getJSONData
+      };
+      citiesRequest.send();
+    }
+  }, {
+    key: 'getJSONData',
+    value: function getJSONData(data) {
+      console.log(data);
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var testCondition = true;
 
-      var ourRequest = new XMLHttpRequest();
-      ourRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
-      ourRequest.onload = function () {
-        console.log('finally', ourRequest.responseText);
-      };
-      ourRequest.send();
+      // var ourRequest = new XMLHttpRequest();
+
+      // ourRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
+      // ourRequest.onload = function() {
+      //   console.log('json', ourRequest.responseText);
+      //   this.jsonData = JSON.parse(ourRequest.responseText);
+      //   console.log('json parsed', this.jsonData.cities[0].section);
+      // }
+      // ourRequest.send();
 
       return React.createElement(
         'div',
@@ -36,6 +59,18 @@ var Navigation = function (_React$Component) {
   }]);
 
   return Navigation;
+}(React.Component);
+
+var Cities = function (_React$Component2) {
+  _inherits(Cities, _React$Component2);
+
+  function Cities() {
+    _classCallCheck(this, Cities);
+
+    return _possibleConstructorReturn(this, (Cities.__proto__ || Object.getPrototypeOf(Cities)).apply(this, arguments));
+  }
+
+  return Cities;
 }(React.Component);
 
 var domContainer = document.querySelector("#navigation-menu");
