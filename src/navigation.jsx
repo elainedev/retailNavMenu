@@ -9,6 +9,7 @@ class NavigationContainer extends React.Component {
       showSlider : false,
       sliderWidth : 0,
       sliderOffsetLeft: 0,
+      cityID : "",
     };
   }
 
@@ -17,6 +18,16 @@ class NavigationContainer extends React.Component {
   // componentDidUpdate() {
   //   console.log('clicked state', this.state)
   // }
+
+  componentDidMount() {
+    // if (this.state.showSlider) {
+      window.addEventListener("resize", () => {
+        this.updateSlider(this.state.cityID);
+        console.log("width", document.documentElement.clientWidth)});
+      // window.addEventListener("resize", () => {console.log("width", document.documentElement.clientWidth)});
+    // }
+    // this.updateSlider(this.state.cityID
+  }
 
   requestJSONData() {    
     new Promise((resolve, reject) => {
@@ -53,9 +64,23 @@ class NavigationContainer extends React.Component {
         showSlider : true,
       })
     }
-    // console.log("clicky", document.getElementById(cityID).offsetWidth);
-    const cityClicked = document.getElementById(cityID);
-    this.setState({ 
+
+    this.setState({cityID : cityID});
+
+    this.updateSlider(cityID);
+    // const cityClicked = document.getElementById(cityID);
+    // this.setState({ 
+    //   sliderWidth : cityClicked.offsetWidth,
+    //   sliderOffsetLeft : cityClicked.offsetLeft,
+    // });
+  }
+
+  updateSlider(cityID) {
+    // this.setState({cityID : cityID});
+
+    let cityClicked = document.getElementById(cityID);
+    this.setState({
+      cityID : cityID,
       sliderWidth : cityClicked.offsetWidth,
       sliderOffsetLeft : cityClicked.offsetLeft,
     });
@@ -69,6 +94,7 @@ class NavigationContainer extends React.Component {
     if (numberCities > 0) {
       for (let i = 0; i < numberCities; i++) {
         const city = this.citiesData[i];
+        // console.log("city clicked", city.section)
         cities.push(<CityItem cityLabel={city.label} cityID={city.section} key={`city-${i}`} onClick={() => this.cityOnClick(city.section)} />)
       }
     }

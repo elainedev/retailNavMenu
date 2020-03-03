@@ -21,21 +21,36 @@ var NavigationContainer = function (_React$Component) {
       dataHasLoaded: false,
       showSlider: false,
       sliderWidth: 0,
-      sliderOffsetLeft: 0
+      sliderOffsetLeft: 0,
+      cityID: ""
     };
     return _this;
   }
 
   _createClass(NavigationContainer, [{
-    key: 'requestJSONData',
+    key: "componentDidMount",
 
 
     // componentDidUpdate() {
     //   console.log('clicked state', this.state)
     // }
 
-    value: function requestJSONData() {
+    value: function componentDidMount() {
       var _this2 = this;
+
+      // if (this.state.showSlider) {
+      window.addEventListener("resize", function () {
+        _this2.updateSlider(_this2.state.cityID);
+        console.log("width", document.documentElement.clientWidth);
+      });
+      // window.addEventListener("resize", () => {console.log("width", document.documentElement.clientWidth)});
+      // }
+      // this.updateSlider(this.state.cityID
+    }
+  }, {
+    key: "requestJSONData",
+    value: function requestJSONData() {
+      var _this3 = this;
 
       new Promise(function (resolve, reject) {
         var citiesRequest = new XMLHttpRequest();
@@ -54,8 +69,8 @@ var NavigationContainer = function (_React$Component) {
         citiesRequest.send();
       }).then(function (data) {
         console.log("city list data obtained:", data);
-        _this2.citiesData = data;
-        _this2.setState({ dataHasLoaded: true });
+        _this3.citiesData = data;
+        _this3.setState({ dataHasLoaded: true });
       }).catch(function (error) {
         console.log(error);
       });
@@ -64,16 +79,31 @@ var NavigationContainer = function (_React$Component) {
     // click handler for when a city is clicked on
 
   }, {
-    key: 'cityOnClick',
+    key: "cityOnClick",
     value: function cityOnClick(cityID) {
       if (this.state.showSlider == false) {
         this.setState({
           showSlider: true
         });
       }
-      // console.log("clicky", document.getElementById(cityID).offsetWidth);
+
+      this.setState({ cityID: cityID });
+
+      this.updateSlider(cityID);
+      // const cityClicked = document.getElementById(cityID);
+      // this.setState({ 
+      //   sliderWidth : cityClicked.offsetWidth,
+      //   sliderOffsetLeft : cityClicked.offsetLeft,
+      // });
+    }
+  }, {
+    key: "updateSlider",
+    value: function updateSlider(cityID) {
+      // this.setState({cityID : cityID});
+
       var cityClicked = document.getElementById(cityID);
       this.setState({
+        cityID: cityID,
         sliderWidth: cityClicked.offsetWidth,
         sliderOffsetLeft: cityClicked.offsetLeft
       });
@@ -82,18 +112,19 @@ var NavigationContainer = function (_React$Component) {
     // use for loop to loop through citiesData and display each city 
 
   }, {
-    key: 'displayCities',
+    key: "displayCities",
     value: function displayCities() {
-      var _this3 = this;
+      var _this4 = this;
 
       var cities = [];
       var numberCities = this.citiesData.length;
 
       if (numberCities > 0) {
         var _loop = function _loop(i) {
-          var city = _this3.citiesData[i];
-          cities.push(React.createElement(CityItem, { cityLabel: city.label, cityID: city.section, key: 'city-' + i, onClick: function onClick() {
-              return _this3.cityOnClick(city.section);
+          var city = _this4.citiesData[i];
+          // console.log("city clicked", city.section)
+          cities.push(React.createElement(CityItem, { cityLabel: city.label, cityID: city.section, key: "city-" + i, onClick: function onClick() {
+              return _this4.cityOnClick(city.section);
             } }));
         };
 
@@ -104,7 +135,7 @@ var NavigationContainer = function (_React$Component) {
       return cities;
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _state = this.state,
           showSlider = _state.showSlider,
@@ -113,11 +144,11 @@ var NavigationContainer = function (_React$Component) {
 
 
       return React.createElement(
-        'div',
-        { className: 'navigation-container' },
+        "div",
+        { className: "navigation-container" },
         React.createElement(
-          'div',
-          { className: 'cities-list' },
+          "div",
+          { className: "cities-list" },
           this.displayCities()
         ),
         React.createElement(BottomBar, { showSlider: showSlider, sliderWidth: sliderWidth, sliderOffsetLeft: sliderOffsetLeft })
@@ -138,7 +169,7 @@ var CityItem = function (_React$Component2) {
   }
 
   _createClass(CityItem, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var _props = this.props,
           cityLabel = _props.cityLabel,
@@ -147,8 +178,8 @@ var CityItem = function (_React$Component2) {
 
 
       return React.createElement(
-        'div',
-        { className: 'city-item', id: cityID, onClick: onClick },
+        "div",
+        { className: "city-item", id: cityID, onClick: onClick },
         cityLabel
       );
     }
@@ -167,7 +198,7 @@ var BottomBar = function (_React$Component3) {
   }
 
   _createClass(BottomBar, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var _props2 = this.props,
           showSlider = _props2.showSlider,
@@ -177,14 +208,14 @@ var BottomBar = function (_React$Component3) {
 
       var clickStyle = {
         width: sliderWidth,
-        transform: 'translateX(' + (sliderOffsetLeft - 20) + 'px)', //subtract 20px because the navigation container has padding-left set at 20px,
+        transform: "translateX(" + (sliderOffsetLeft - 20) + "px)", //subtract 20px because the navigation container has padding-left set at 20px,
         transition: "all 0.5s"
       };
 
       return React.createElement(
-        'div',
-        { className: 'bottom-bar' },
-        showSlider ? React.createElement('div', { className: 'slider', style: clickStyle }) : null
+        "div",
+        { className: "bottom-bar" },
+        showSlider ? React.createElement("div", { className: "slider", style: clickStyle }) : null
       );
     }
   }]);
