@@ -98,9 +98,8 @@ var CityItem = function (_React$Component2) {
   _createClass(CityItem, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var cup = document.getElementById(this.props.cityID);
-      // let cup = document.querySelector(".cupertino");
-      console.log('mounted', cup, cup.offsetWidth);
+      var city = document.getElementById(this.props.cityID);
+      console.log('mounted', city, city.offsetWidth, city.offsetLeft);
     }
   }, {
     key: 'render',

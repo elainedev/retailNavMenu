@@ -72,9 +72,8 @@ class CityItem extends React.Component {
   }
 
   componentDidMount() {
-    let cup = document.getElementById(this.props.cityID);
-    // let cup = document.querySelector(".cupertino");
-    console.log('mounted', cup, cup.offsetWidth)
+    let city = document.getElementById(this.props.cityID);
+    console.log('mounted', city, city.offsetWidth, city.offsetLeft)
   }
 
   render() {
