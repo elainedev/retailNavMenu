@@ -16,21 +16,21 @@ var Navigation = function (_React$Component) {
   }
 
   _createClass(Navigation, [{
-    key: "render",
+    key: 'render',
     value: function render() {
       var testCondition = true;
 
-      // var ourRequest = new XMLHttpRequest();
-      // ourRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNav/master/navigation.json');
-      // ourRequest.onload = function() {
-      //   console.log('fucking ifnally', ourRequest.responseText);
-      // }
-      // ourRequest.send();
+      var ourRequest = new XMLHttpRequest();
+      ourRequest.open('GET', 'https://raw.githubusercontent.com/elainedev/retailNavMenu/master/src/navigation.json');
+      ourRequest.onload = function () {
+        console.log('finally', ourRequest.responseText);
+      };
+      ourRequest.send();
 
       return React.createElement(
-        "div",
-        { className: "parent" },
-        "new test"
+        'div',
+        { className: 'parent' },
+        'new test'
       );
     }
   }]);
