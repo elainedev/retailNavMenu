@@ -57,7 +57,7 @@ var NavigationContainer = function (_React$Component) {
 
       if (numberCities > 0) {
         for (var i = 0; i < numberCities; i++) {
-          cities.push(React.createElement(CityItem, { cityName: this.citiesData[i].label, key: 'city-' + i }));
+          cities.push(React.createElement(CityItem, { cityLabel: this.citiesData[i].label, cityID: this.citiesData[i].section, key: 'city-' + i }));
         }
       }
       return cities;
@@ -86,20 +86,35 @@ var NavigationContainer = function (_React$Component) {
 var CityItem = function (_React$Component2) {
   _inherits(CityItem, _React$Component2);
 
-  function CityItem() {
+  function CityItem(props) {
     _classCallCheck(this, CityItem);
 
-    return _possibleConstructorReturn(this, (CityItem.__proto__ || Object.getPrototypeOf(CityItem)).apply(this, arguments));
+    var _this3 = _possibleConstructorReturn(this, (CityItem.__proto__ || Object.getPrototypeOf(CityItem)).call(this, props));
+
+    _this3.cityRef = React.createRef();
+    return _this3;
   }
 
   _createClass(CityItem, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var cup = document.getElementById(this.props.cityID);
+      // let cup = document.querySelector(".cupertino");
+      console.log('mounted', cup, cup.offsetWidth);
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _props = this.props,
+          cityLabel = _props.cityLabel,
+          cityID = _props.cityID;
+
 
       return React.createElement(
         'div',
-        { className: 'city-item' },
-        this.props.cityName
+        { className: 'city-item', id: cityID },
+        cityLabel,
+        this.cityRef.current
       );
     }
   }]);
@@ -119,6 +134,7 @@ var BottomBar = function (_React$Component3) {
   _createClass(BottomBar, [{
     key: 'render',
     value: function render() {
+
       return React.createElement('div', { className: 'bottom-bar' });
     }
   }]);

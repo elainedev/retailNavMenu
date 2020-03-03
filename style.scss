@@ -1,17 +1,15 @@
 body {
-	min-width: 700px;
+	min-width: 800px;
 }
 
 .navigation-container {
 	width: 98%;
 	margin: 30px auto 0;
-	background: pink;
 
 	.cities-list {
 		display: flex;
 		justify-content: space-around;
 	}
-
 }
 
 .city-item {

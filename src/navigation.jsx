@@ -43,7 +43,7 @@ class NavigationContainer extends React.Component {
 
     if (numberCities > 0) {
       for (let i = 0; i < numberCities; i++) {
-        cities.push(<CityItem cityName={this.citiesData[i].label} key={`city-${i}`} />)
+        cities.push(<CityItem cityLabel={this.citiesData[i].label} cityID={this.citiesData[i].section} key={`city-${i}` } />)
       }
     }
     return cities;
@@ -66,25 +66,43 @@ class NavigationContainer extends React.Component {
 
 class CityItem extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.cityRef = React.createRef();
+  }
+
+  componentDidMount() {
+    let cup = document.getElementById(this.props.cityID);
+    // let cup = document.querySelector(".cupertino");
+    console.log('mounted', cup, cup.offsetWidth)
+  }
+
   render() {
-    
+    const {cityLabel, cityID} = this.props;
+
     return (
-      <div className="city-item">
-        {this.props.cityName}
+      <div className="city-item" id={cityID}>
+        {cityLabel}
+        {this.cityRef.current}
       </div>
     )
   }
 }
 
 class BottomBar extends React.Component {
+
+
   render() {
+
     return (
       <div className="bottom-bar">
+
       </div>
     )
   }
 
 }
+
 
 
 
