@@ -202,38 +202,35 @@ class LocalTime extends React.Component<LocalTimePropsType> {
   }
 
   computeTimeZone() {
-    let timeZone = "";
+    let standardTimeZone = "UTC";
+    const cityTimeZone = this.props.cityTimeZone;
+    const formattedTimeZone = cityTimeZone.indexOf(" ") > -1 ? cityTimeZone.split(" ").join("_") : cityTimeZone;
 
-    switch (this.props.cityTimeZone) {
+    switch (cityTimeZone) {
       case "Cupertino":
-        timeZone = "America/Los_Angeles";
+        standardTimeZone = "America/Los_Angeles";
         break;
       case "New York City":
-        timeZone = "America/New_York";
+        standardTimeZone = "America/New_York";
         break;
       case "London":
-        timeZone = "Europe/London";
+        standardTimeZone = `Europe/${formattedTimeZone}`;
         break;
       case "Amsterdam":
-        timeZone = "Europe/Amsterdam";
+        standardTimeZone = `Europe/${formattedTimeZone}`;
         break;
       case "Tokyo":
-        timeZone = "Asia/Tokyo";
+        standardTimeZone = `Asia/${formattedTimeZone}`;
         break;
       case "Hong Kong":
-        timeZone = "Asia/Hong_Kong";
+        standardTimeZone = `Asia/${formattedTimeZone}`;
         break;
       case "Sydney":
-        timeZone = "Australia/Sydney";
+        standardTimeZone = `Australia/${formattedTimeZone}`;
         break;
     }
 
-    return timeZone;
-  }
-
-  timeZoneOptions = {
-    timeZone : this.computeTimeZone(),
-    hour: 'numeric', minute: 'numeric', second: 'numeric',
+    return standardTimeZone;
   }
 
   render() {
@@ -250,9 +247,6 @@ class LocalTime extends React.Component<LocalTimePropsType> {
     )
   }
 }
-
-
-
 
 
 

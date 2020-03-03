@@ -237,11 +237,6 @@ var LocalTime = function (_React$Component4) {
 
     var _this7 = _possibleConstructorReturn(this, (LocalTime.__proto__ || Object.getPrototypeOf(LocalTime)).call(this, props));
 
-    _this7.timeZoneOptions = {
-      timeZone: _this7.computeTimeZone(),
-      hour: 'numeric', minute: 'numeric', second: 'numeric'
-    };
-
     _this7.state = { date: new Date() };
     return _this7;
   }
@@ -270,33 +265,35 @@ var LocalTime = function (_React$Component4) {
   }, {
     key: "computeTimeZone",
     value: function computeTimeZone() {
-      var timeZone = "";
+      var standardTimeZone = "UTC";
+      var cityTimeZone = this.props.cityTimeZone;
+      var formattedTimeZone = cityTimeZone.indexOf(" ") > -1 ? cityTimeZone.split(" ").join("_") : cityTimeZone;
 
-      switch (this.props.cityTimeZone) {
+      switch (cityTimeZone) {
         case "Cupertino":
-          timeZone = "America/Los_Angeles";
+          standardTimeZone = "America/Los_Angeles";
           break;
         case "New York City":
-          timeZone = "America/New_York";
+          standardTimeZone = "America/New_York";
           break;
         case "London":
-          timeZone = "Europe/London";
+          standardTimeZone = "Europe/" + formattedTimeZone;
           break;
         case "Amsterdam":
-          timeZone = "Europe/Amsterdam";
+          standardTimeZone = "Europe/" + formattedTimeZone;
           break;
         case "Tokyo":
-          timeZone = "Asia/Tokyo";
+          standardTimeZone = "Asia/" + formattedTimeZone;
           break;
         case "Hong Kong":
-          timeZone = "Asia/Hong_Kong";
+          standardTimeZone = "Asia/" + formattedTimeZone;
           break;
         case "Sydney":
-          timeZone = "Australia/Sydney";
+          standardTimeZone = "Australia/" + formattedTimeZone;
           break;
       }
 
-      return timeZone;
+      return standardTimeZone;
     }
   }, {
     key: "render",

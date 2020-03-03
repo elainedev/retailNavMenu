@@ -8,6 +8,7 @@ $dark-gray: #242424;
 $hover-color: #2D9FEB;
 $bottom-bar-height: 1px;
 
+
 .navigation-container {
 	min-height: 56px;
 	margin-top: 30px;
@@ -51,7 +52,7 @@ $bottom-bar-height: 1px;
 	display: flex;
 	justify-content: center;
 	align-items: center; 
-	padding: 40px;
+	padding: 70px 50px 50px;
 	color: $light-gray;
 
 	.time {
