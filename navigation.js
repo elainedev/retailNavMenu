@@ -22,7 +22,8 @@ var NavigationContainer = function (_React$Component) {
       showSlider: false,
       sliderWidth: 0,
       sliderOffsetLeft: 0,
-      city: ""
+      city: "",
+      isResizing: false
     };
     return _this;
   }
@@ -33,7 +34,7 @@ var NavigationContainer = function (_React$Component) {
       var _this2 = this;
 
       window.addEventListener("resize", function () {
-        return _this2.updateSlider(_this2.state.city);
+        return _this2.updateSlider(_this2.state.city, true);
       });
     }
   }, {
@@ -70,26 +71,27 @@ var NavigationContainer = function (_React$Component) {
   }, {
     key: "cityOnClick",
     value: function cityOnClick(city) {
-      if (this.state.showSlider == false) {
-        this.setState({
-          showSlider: true
-        });
+      if (!this.state.showSlider) {
+        this.setState({ showSlider: true });
       }
 
-      this.setState({
-        city: city
-      });
+      this.setState({ city: city });
 
       this.updateSlider(city);
     }
+
+    // update in the state the slider's width, offsetLeft, and whether browser is resizing
+
   }, {
     key: "updateSlider",
-    value: function updateSlider(city) {
+    value: function updateSlider(city, resizing) {
       var cityClicked = document.getElementById(city);
 
+      resizing ? this.setState({ isResizing: true }) : this.setState({ isResizing: false });
+
       this.setState({
-        sliderWidth: cityClicked.offsetWidth,
-        sliderOffsetLeft: cityClicked.offsetLeft
+        sliderWidth: cityClicked ? cityClicked.offsetWidth : 0,
+        sliderOffsetLeft: cityClicked ? cityClicked.offsetLeft : 0
       });
     }
 
@@ -106,7 +108,6 @@ var NavigationContainer = function (_React$Component) {
       if (numberCities > 0) {
         var _loop = function _loop(i) {
           var city = _this4.citiesData[i];
-          // console.log("city clicked", city.section)
           cities.push(React.createElement(CityItem, { cityLabel: city.label, cityID: city.section, key: "city-" + i, onClick: function onClick() {
               return _this4.cityOnClick(city.section);
             } }));
@@ -124,7 +125,8 @@ var NavigationContainer = function (_React$Component) {
       var _state = this.state,
           showSlider = _state.showSlider,
           sliderWidth = _state.sliderWidth,
-          sliderOffsetLeft = _state.sliderOffsetLeft;
+          sliderOffsetLeft = _state.sliderOffsetLeft,
+          isResizing = _state.isResizing;
 
 
       return React.createElement(
@@ -135,13 +137,16 @@ var NavigationContainer = function (_React$Component) {
           { className: "cities-list" },
           this.displayCities()
         ),
-        React.createElement(BottomBar, { showSlider: showSlider, sliderWidth: sliderWidth, sliderOffsetLeft: sliderOffsetLeft })
+        React.createElement(BottomBar, { showSlider: showSlider, sliderWidth: sliderWidth, sliderOffsetLeft: sliderOffsetLeft, noTransition: isResizing })
       );
     }
   }]);
 
   return NavigationContainer;
 }(React.Component);
+
+// normally I would use FlowJS to check typing; I am not using Flow here, but I thought I would provide PropTypes anyway
+
 
 var CityItem = function (_React$Component2) {
   _inherits(CityItem, _React$Component2);
@@ -187,13 +192,14 @@ var BottomBar = function (_React$Component3) {
       var _props2 = this.props,
           showSlider = _props2.showSlider,
           sliderWidth = _props2.sliderWidth,
-          sliderOffsetLeft = _props2.sliderOffsetLeft;
+          sliderOffsetLeft = _props2.sliderOffsetLeft,
+          noTransition = _props2.noTransition;
 
 
       var clickStyle = {
         width: sliderWidth,
         transform: "translateX(" + (sliderOffsetLeft - 20) + "px)", //subtract 20px because the navigation container has padding-left set at 20px,
-        transition: "all 0.5s"
+        transition: noTransition ? null : "all 0.5s" // slider automatically adjusts position without transition time when user resizes browser window
       };
 
       return React.createElement(

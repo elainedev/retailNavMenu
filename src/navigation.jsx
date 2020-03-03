@@ -1,4 +1,3 @@
-
 class NavigationContainer extends React.Component {
 
   constructor(props) {
@@ -10,13 +9,14 @@ class NavigationContainer extends React.Component {
       sliderWidth : 0,
       sliderOffsetLeft: 0,
       city : "",
+      isResizing : false,
     };
   }
 
   citiesData = [];
 
   componentDidMount() {
-    window.addEventListener("resize", () => this.updateSlider(this.state.city));
+    window.addEventListener("resize", () => this.updateSlider(this.state.city, true));
   }
 
   requestJSONData() {    
@@ -49,25 +49,24 @@ class NavigationContainer extends React.Component {
 
   // click handler for when a city is clicked on
   cityOnClick(city) {
-    if (this.state.showSlider == false) {
-      this.setState({
-        showSlider : true,
-      })
+    if (! this.state.showSlider) {
+      this.setState({ showSlider : true });
     }
 
-    this.setState({
-      city: city,
-    })
+    this.setState({ city: city });
 
     this.updateSlider(city);
   }
 
-  updateSlider(city) {
+  // update in the state the slider's width, offsetLeft, and whether browser is resizing
+  updateSlider(city, resizing) {
     let cityClicked = document.getElementById(city);
 
+    resizing ? this.setState({isResizing : true}) : this.setState({isResizing : false});
+
     this.setState({
-      sliderWidth : cityClicked.offsetWidth,
-      sliderOffsetLeft : cityClicked.offsetLeft,
+      sliderWidth : cityClicked ? cityClicked.offsetWidth : 0,
+      sliderOffsetLeft : cityClicked ? cityClicked.offsetLeft : 0,
     });
   }
 
@@ -79,7 +78,6 @@ class NavigationContainer extends React.Component {
     if (numberCities > 0) {
       for (let i = 0; i < numberCities; i++) {
         const city = this.citiesData[i];
-        // console.log("city clicked", city.section)
         cities.push(<CityItem cityLabel={city.label} cityID={city.section} key={`city-${i}`} onClick={() => this.cityOnClick(city.section)} />)
       }
     }
@@ -87,7 +85,7 @@ class NavigationContainer extends React.Component {
   }
 
   render() {
-    const {showSlider, sliderWidth, sliderOffsetLeft} = this.state;
+    const {showSlider, sliderWidth, sliderOffsetLeft, isResizing} = this.state;
 
     return (
       <div className="navigation-container">
@@ -95,13 +93,20 @@ class NavigationContainer extends React.Component {
           {this.displayCities()}
         </div>
 
-        <BottomBar showSlider={showSlider} sliderWidth={sliderWidth} sliderOffsetLeft={sliderOffsetLeft}/>
+        <BottomBar showSlider={showSlider} sliderWidth={sliderWidth} sliderOffsetLeft={sliderOffsetLeft} noTransition={isResizing} />
       </div>
     )
   }
 }
 
-class CityItem extends React.Component {
+// normally I would use FlowJS to check typing; I am not using Flow here, but I thought I would provide PropTypes anyway
+type CityItemPropsType = {
+  cityLabel : string,
+  cityID : string,
+  onClick : () => void,
+}
+
+class CityItem extends React.Component<CityItemPropsType> {
 
   render() {
     const {cityLabel, cityID, onClick} = this.props;
@@ -114,16 +119,23 @@ class CityItem extends React.Component {
   }
 }
 
-class BottomBar extends React.Component {
+type BottomBarPropsType = {
+  showSlider : boolean,
+  sliderWidth : number,
+  sliderOffsetLeft : number,
+  noTransition : boolean,
+}
+
+class BottomBar extends React.Component<BottomBarPropsType> {
 
   render() {
 
-    const {showSlider, sliderWidth, sliderOffsetLeft} = this.props;
+    const {showSlider, sliderWidth, sliderOffsetLeft, noTransition} = this.props;
 
     const clickStyle = {
       width: sliderWidth,
       transform : `translateX(${sliderOffsetLeft - 20}px)`,  //subtract 20px because the navigation container has padding-left set at 20px,
-      transition: "all 0.5s",
+      transition: noTransition ? null : "all 0.5s", // slider automatically adjusts position without transition time when user resizes browser window
     }
 
     return (
