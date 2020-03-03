@@ -15,18 +15,8 @@ class NavigationContainer extends React.Component {
 
   citiesData = [];
 
-  // componentDidUpdate() {
-  //   console.log('clicked state', this.state)
-  // }
-
   componentDidMount() {
-    // if (this.state.showSlider) {
-      window.addEventListener("resize", () => {
-        this.updateSlider(this.state.cityID);
-        console.log("width", document.documentElement.clientWidth)});
-      // window.addEventListener("resize", () => {console.log("width", document.documentElement.clientWidth)});
-    // }
-    // this.updateSlider(this.state.cityID
+    window.addEventListener("resize", () => this.updateSlider(this.state.cityID));
   }
 
   requestJSONData() {    
@@ -64,21 +54,13 @@ class NavigationContainer extends React.Component {
         showSlider : true,
       })
     }
-
-    this.setState({cityID : cityID});
-
+    
     this.updateSlider(cityID);
-    // const cityClicked = document.getElementById(cityID);
-    // this.setState({ 
-    //   sliderWidth : cityClicked.offsetWidth,
-    //   sliderOffsetLeft : cityClicked.offsetLeft,
-    // });
   }
 
   updateSlider(cityID) {
-    // this.setState({cityID : cityID});
-
     let cityClicked = document.getElementById(cityID);
+
     this.setState({
       cityID : cityID,
       sliderWidth : cityClicked.offsetWidth,
@@ -130,7 +112,6 @@ class CityItem extends React.Component {
 }
 
 class BottomBar extends React.Component {
-
 
   render() {
 

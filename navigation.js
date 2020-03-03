@@ -29,23 +29,12 @@ var NavigationContainer = function (_React$Component) {
 
   _createClass(NavigationContainer, [{
     key: "componentDidMount",
-
-
-    // componentDidUpdate() {
-    //   console.log('clicked state', this.state)
-    // }
-
     value: function componentDidMount() {
       var _this2 = this;
 
-      // if (this.state.showSlider) {
       window.addEventListener("resize", function () {
-        _this2.updateSlider(_this2.state.cityID);
-        console.log("width", document.documentElement.clientWidth);
+        return _this2.updateSlider(_this2.state.cityID);
       });
-      // window.addEventListener("resize", () => {console.log("width", document.documentElement.clientWidth)});
-      // }
-      // this.updateSlider(this.state.cityID
     }
   }, {
     key: "requestJSONData",
@@ -87,21 +76,13 @@ var NavigationContainer = function (_React$Component) {
         });
       }
 
-      this.setState({ cityID: cityID });
-
       this.updateSlider(cityID);
-      // const cityClicked = document.getElementById(cityID);
-      // this.setState({ 
-      //   sliderWidth : cityClicked.offsetWidth,
-      //   sliderOffsetLeft : cityClicked.offsetLeft,
-      // });
     }
   }, {
     key: "updateSlider",
     value: function updateSlider(cityID) {
-      // this.setState({cityID : cityID});
-
       var cityClicked = document.getElementById(cityID);
+
       this.setState({
         cityID: cityID,
         sliderWidth: cityClicked.offsetWidth,
