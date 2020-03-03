@@ -51,17 +51,19 @@ var NavigationContainer = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var citiesArr = this.state.citiesArr;
+      // console.log('render', this.state.citiesArr, cities)
+      // if (cities.length > 0) {
+      //   cities = this.state.citiesArr;
+      //   console.log("if", cities[0].section)
+      // }
+      // console.log("outside", cities)
 
-      var cities = this.state.citiesArr;
-      console.log('render', this.state.citiesArr, cities);
-
-      if (this.state.citiesArr.length > 0) {
-        cities = this.state.citiesArr;
-        console.log("if", cities);
-      }
-      console.log("outside", cities);
-
-      return React.createElement('div', { className: 'navigation-container' });
+      return React.createElement(
+        'div',
+        { className: 'navigation-container' },
+        React.createElement(CitiesMenu, { cities: citiesArr.length > 0 ? citiesArr[0].section : "" })
+      );
     }
   }]);
 

@@ -1,12 +1,28 @@
 {
   "name": "retailNavMenu",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-plugin-jsx-control-statements": "^4.0.0"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
+    "node-gyp": "^6.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elainedev/retailNavMenu.git"
+  },
+  "bugs": {
+    "url": "https://github.com/elainedev/retailNavMenu/issues"
+  },
+  "homepage": "https://github.com/elainedev/retailNavMenu#readme",
+  "description": ""
 }

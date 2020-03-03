@@ -39,18 +39,17 @@ class NavigationContainer extends React.Component {
 
   render() {
   
-    let cities = this.state.citiesArr;
-    console.log('render', this.state.citiesArr, cities)
-
-    if (this.state.citiesArr.length > 0) {
-      cities = this.state.citiesArr;
-      console.log("if", cities)
-    }
-    console.log("outside", cities)
+    let {citiesArr} = this.state;
+    // console.log('render', this.state.citiesArr, cities)
+    // if (cities.length > 0) {
+    //   cities = this.state.citiesArr;
+    //   console.log("if", cities[0].section)
+    // }
+    // console.log("outside", cities)
     
     return (
       <div className="navigation-container">
-
+        <CitiesMenu cities={citiesArr.length > 0 ? citiesArr[0].section : ""} />
       </div>
 
     )
